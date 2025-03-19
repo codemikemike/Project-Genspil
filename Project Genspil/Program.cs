@@ -1,10 +1,13 @@
-﻿namespace Project_Genspil
+﻿using System.Xml.Xsl;
+
+namespace Project_Genspil
 {
     internal class Program
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
+            Menu menu = new Menu();
+            menu.Show();
         }
     }
 }
