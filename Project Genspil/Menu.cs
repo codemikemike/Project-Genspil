@@ -91,22 +91,54 @@ namespace Project_Genspil
 
         private void SøgSpil()
         {
-            Console.WriteLine("Funktion til søgning af spil kommer her...");
+            var searchMenu = new SearchGameMenu(new List<string> 
+            {
+                "Spil1",
+                "Spil2",
+                "Spil3",
+                "Spil4"
+            });
+
+            searchMenu.Show();
         }
+
 
         private void UdskrivLagerliste()
         {
-            Console.WriteLine("Funktion til udskrivning af lagerliste kommer her...");
+            var printInventoryMenu = new PrintInventoryMenu(new List<string> 
+            {
+                "Spil1",
+                "Spil2",
+                "Spil3",
+                "Spil4"
+            });
+
+            printInventoryMenu.Show();
         }
 
         private void HåndterForespørgsler()
         {
-            Console.WriteLine("Funktion til håndtering af forespørgsler kommer her...");
+            var requestMenu = new HandleRequestsMenu(new List<string> 
+            {
+                "Reservation af 'Catan' fra Mads Andersen",
+                "Forespørgsel om pris på 'Carcassonne' fra Louise Jensen",
+                "Købsanmodning på 'Ticket to Ride' fra Tariq Hassan"
+            });
+
+            requestMenu.Show();
         }
+
 
         private void AdministrerKunder()
         {
-            Console.WriteLine("Funktion til administration af kunder kommer her...");
+            var manageCustomersMenu = new ManageCustomersMenu(new List<string> 
+            {
+                "Mads Andersen",
+                "Louise Jensen",
+                "Tariq Hassan"
+            });
+
+            manageCustomersMenu.Show();
         }
     }
 }

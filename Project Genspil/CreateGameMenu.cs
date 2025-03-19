@@ -7,21 +7,22 @@ namespace Project_Genspil
     {
         private List<string> menuOptions = new List<string>
         {
-            "Tilbage", "Søg Spil", "Udskriv Lagerliste", "Håndter Forespørgsler", "Administrer Kunder", "Afslut"
+            "Tilbage", "Tilføj nyt spil", "Se eksisterende spil", "Rediger spil", "Slet spil", "Afslut"
         };
+
+        private List<string> gameLibrary = new List<string>(); // Liste over spil
 
         public void Show()
         {
-            bool running = true; // Variabel til at holde menuen kørende i en løkke
-            int option = 0; // Holder styr på hvilken menuoption der er valgt
+            bool running = true;
+            int option = 0;
             Console.CursorVisible = false;
 
-            while (running) // Sørger for, at menuen genstarter efter en handling er udført
+            while (running)
             {
                 Console.Clear();
-                Console.WriteLine("\u001b[33m--- Her kan du oprette spil ---\u001b[0m");
+                Console.WriteLine("\u001b[33m--- Opret Spil Menu ---\u001b[0m");
 
-                // Udskriv menuen med farvet markør ved den valgte mulighed
                 for (int i = 0; i < menuOptions.Count; i++)
                 {
                     if (i == option)
@@ -30,21 +31,21 @@ namespace Project_Genspil
                         Console.WriteLine($"   {menuOptions[i]}");
                 }
 
-                var key = Console.ReadKey(true).Key; // Læs tastetryk uden at vise det i konsollen
+                var key = Console.ReadKey(true).Key;
 
                 switch (key)
                 {
                     case ConsoleKey.DownArrow:
-                        option = (option + 1) % menuOptions.Count; // Gå ned i menuen (loop tilbage til toppen)
+                        option = (option + 1) % menuOptions.Count;
                         break;
                     case ConsoleKey.UpArrow:
-                        option = (option - 1 + menuOptions.Count) % menuOptions.Count; // Gå op i menuen (loop til bunden)
+                        option = (option - 1 + menuOptions.Count) % menuOptions.Count;
                         break;
                     case ConsoleKey.Enter:
-                        HandleSelection(option); // Kald den valgte funktion
+                        HandleSelection(option);
                         break;
                     case ConsoleKey.Escape:
-                        running = false; // Luk programmet, hvis brugeren trykker "Escape"
+                        running = false;
                         break;
                 }
             }
@@ -61,52 +62,125 @@ namespace Project_Genspil
                     Back();
                     break;
                 case 1:
-                    SøgSpil();
+                    TilføjNytSpil();
                     break;
                 case 2:
-                    UdskrivLagerliste();
+                    SeEksisterendeSpil();
                     break;
                 case 3:
-                    HåndterForespørgsler();
+                    RedigerSpil();
                     break;
                 case 4:
-                    AdministrerKunder();
+                    SletSpil();
                     break;
                 case 5:
                     Console.WriteLine("Afslutter program...");
-                    Environment.Exit(0); // Afslutter programmet korrekt
+                    Environment.Exit(0);
                     break;
             }
 
-            // **Tilføjet:** Gør det muligt at vende tilbage til menuen
             Console.WriteLine("\nTryk på en tast for at vende tilbage til menuen...");
-            Console.ReadKey(); // Venter på input før menuen vises igen
+            Console.ReadKey();
         }
 
         private void Back()
         {
             Menu menu = new Menu();
-                menu.Show();   
+            menu.Show();
         }
 
-        private void SøgSpil()
+        private void TilføjNytSpil()
         {
-            Console.WriteLine("Funktion til søgning af spil kommer her...");
+            Console.Write("Indtast navnet på det nye spil: ");
+            string nytSpil = Console.ReadLine();
+
+            if (!string.IsNullOrWhiteSpace(nytSpil))
+            {
+                gameLibrary.Add(nytSpil);
+                Console.WriteLine($"Spillet '{nytSpil}' er blevet tilføjet!");
+            }
+            else
+            {
+                Console.WriteLine("Ugyldigt input. Spillet blev ikke tilføjet.");
+            }
         }
 
-        private void UdskrivLagerliste()
+        private void SeEksisterendeSpil()
         {
-            Console.WriteLine("Funktion til udskrivning af lagerliste kommer her...");
+            Console.WriteLine("Eksisterende spil i systemet:");
+
+            if (gameLibrary.Count == 0)
+            {
+                Console.WriteLine("Ingen spil er registreret endnu.");
+            }
+            else
+            {
+                foreach (var spil in gameLibrary)
+                {
+                    Console.WriteLine($"- {spil}");
+                }
+            }
         }
 
-        private void HåndterForespørgsler()
+        private void RedigerSpil()
         {
-            Console.WriteLine("Funktion til håndtering af forespørgsler kommer her...");
+            if (gameLibrary.Count == 0)
+            {
+                Console.WriteLine("Der er ingen spil at redigere.");
+                return;
+            }
+
+            Console.WriteLine("Vælg et spil at redigere:");
+            for (int i = 0; i < gameLibrary.Count; i++)
+            {
+                Console.WriteLine($"{i + 1}. {gameLibrary[i]}");
+            }
+
+            Console.Write("Indtast nummeret på spillet du vil redigere: ");
+            if (int.TryParse(Console.ReadLine(), out int index) && index > 0 && index <= gameLibrary.Count)
+            {
+                Console.Write("Indtast det nye navn for spillet: ");
+                string nytNavn = Console.ReadLine();
+                if (!string.IsNullOrWhiteSpace(nytNavn))
+                {
+                    gameLibrary[index - 1] = nytNavn;
+                    Console.WriteLine("Spillet er blevet opdateret.");
+                }
+                else
+                {
+                    Console.WriteLine("Ugyldigt input. Spillet blev ikke ændret.");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Ugyldigt valg.");
+            }
         }
 
-        private void AdministrerKunder()
+        private void SletSpil()
         {
-            Console.WriteLine("Funktion til administration af kunder kommer her...");
+            if (gameLibrary.Count == 0)
+            {
+                Console.WriteLine("Der er ingen spil at slette.");
+                return;
+            }
+
+            Console.WriteLine("Vælg et spil at slette:");
+            for (int i = 0; i < gameLibrary.Count; i++)
+            {
+                Console.WriteLine($"{i + 1}. {gameLibrary[i]}");
+            }
+
+            Console.Write("Indtast nummeret på spillet du vil slette: ");
+            if (int.TryParse(Console.ReadLine(), out int index) && index > 0 && index <= gameLibrary.Count)
+            {
+                Console.WriteLine($"Spillet '{gameLibrary[index - 1]}' er blevet slettet.");
+                gameLibrary.RemoveAt(index - 1);
+            }
+            else
+            {
+                Console.WriteLine("Ugyldigt valg.");
+            }
         }
     }
 }
